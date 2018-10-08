@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.apache.commons.cli.*;
 import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 
@@ -14,51 +15,58 @@ import info.nauar.irc.triviabot.processor.nick.NickProcessorFactory;
 
 public class Scorebot extends PircBot
 {
-	private String triviaChannel = "#bot.xonotic";
-	private String triviabot = "triviabot";
+	private String name;
+	private String channel;
 	private MessageProcessor mp;
 	private NickProcessor np;
 	private TreeMap<String, Integer> scores;
 	
-	public Scorebot()
+	public Scorebot(String name, String channel)
 	{
 		super();
 		scores = new TreeMap<>();
 		mp = MessageProcessorFactory.getInstance("", this);
 		np = NickProcessorFactory.getInstance("", this);
+		this.name = name;
+		this.channel = channel;
 	}
-	
+
 	public static void main(String args[]) throws Exception
 	{
+		Options options = new Options();
 
-		Scorebot bot = new Scorebot();
+		Option name = new Option("n", "name", true, "nickname");
+		name.setRequired(true);
+		options.addOption(name);
+
+		Option channel = new Option("ch", "channel", true, "channel to connect");
+		channel.setRequired(true);
+		options.addOption(channel);
+
+		CommandLineParser parser = new DefaultParser();
+		HelpFormatter formatter = new HelpFormatter();
+		CommandLine cmd;
+
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+			formatter.printHelp("utility-name", options);
+
+			System.exit(1);
+			throw e;
+		}
+
+		Scorebot bot = new Scorebot(cmd.getOptionValue("name"), cmd.getOptionValue("channel"));
 		bot.setVerbose(true);
 		bot.setAutoNickChange(true);
-		bot.setName("triviaScore");
 		bot.connect("irc.quakenet.org");
-		if (args.length == 1)
-			bot.setTriviaChannel(args[0]);
-		bot.joinChannel(bot.triviaChannel);
-	}
-	
-	public String getTriviaChannel()
-	{
-		return triviaChannel;
+		bot.setName(bot.name);
+		bot.joinChannel(bot.channel);
 	}
 
-	public void setTriviaChannel(String triviaChannel)
-	{
-		this.triviaChannel = triviaChannel;
-	}
-
-	public String getTriviabot()
-	{
-		return triviabot;
-	}
-
-	public void setTriviabot(String triviabot)
-	{
-		this.triviabot = triviabot;
+	public String getChannel() {
+		return channel;
 	}
 
 	@Override
