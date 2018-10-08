@@ -1,6 +1,6 @@
-package info.nauar.irc.triviabot.processor.message;
+package info.nauar.irc.triviascore.processor.message;
 
-import info.nauar.irc.triviabot.Scorebot;
+import info.nauar.irc.triviascore.Scorebot;
 
 public class DefaultMessageProcessor implements MessageProcessor
 {
@@ -14,7 +14,7 @@ public class DefaultMessageProcessor implements MessageProcessor
 	public void processMessage(String channel, String sender, String login, String hostname, String message)
 	{
 		message = message.trim();
-		if (sender.equals(bot.getTriviabot()))
+		if (sender.equals(bot.getTriviaName()))
 		{
 			processTriviaMessage(channel, sender, login,  hostname, message);
 		}

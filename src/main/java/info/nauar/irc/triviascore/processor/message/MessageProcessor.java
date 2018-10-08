@@ -1,4 +1,4 @@
-package info.nauar.irc.triviabot.processor.message;
+package info.nauar.irc.triviascore.processor.message;
 
 public interface MessageProcessor
 {

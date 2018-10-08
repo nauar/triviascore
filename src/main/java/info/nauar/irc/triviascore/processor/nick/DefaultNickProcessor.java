@@ -1,6 +1,6 @@
-package info.nauar.irc.triviabot.processor.nick;
+package info.nauar.irc.triviascore.processor.nick;
 
-import info.nauar.irc.triviabot.Scorebot;
+import info.nauar.irc.triviascore.Scorebot;
 
 public class DefaultNickProcessor implements NickProcessor
 {

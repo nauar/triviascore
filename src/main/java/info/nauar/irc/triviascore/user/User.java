@@ -1,4 +1,4 @@
-package info.nauar.irc.triviabot.user;
+package info.nauar.irc.triviascore.user;
 
 public class User implements Comparable<User>
 {

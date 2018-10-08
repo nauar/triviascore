@@ -1,4 +1,4 @@
-package info.nauar.irc.triviabot.processor.nick;
+package info.nauar.irc.triviascore.processor.nick;
 
 public interface NickProcessor
 {

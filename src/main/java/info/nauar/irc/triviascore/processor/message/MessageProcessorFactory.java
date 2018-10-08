@@ -1,6 +1,6 @@
-package info.nauar.irc.triviabot.processor.message;
+package info.nauar.irc.triviascore.processor.message;
 
-import info.nauar.irc.triviabot.Scorebot;
+import info.nauar.irc.triviascore.Scorebot;
 
 public class MessageProcessorFactory
 {

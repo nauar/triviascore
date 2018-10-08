@@ -1,4 +1,4 @@
-package info.nauar.irc.triviabot;
+package info.nauar.irc.triviascore;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,36 +8,39 @@ import org.apache.commons.cli.*;
 import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 
-import info.nauar.irc.triviabot.processor.message.MessageProcessor;
-import info.nauar.irc.triviabot.processor.message.MessageProcessorFactory;
-import info.nauar.irc.triviabot.processor.nick.NickProcessor;
-import info.nauar.irc.triviabot.processor.nick.NickProcessorFactory;
+import info.nauar.irc.triviascore.processor.message.MessageProcessor;
+import info.nauar.irc.triviascore.processor.message.MessageProcessorFactory;
+import info.nauar.irc.triviascore.processor.nick.NickProcessor;
+import info.nauar.irc.triviascore.processor.nick.NickProcessorFactory;
 
 public class Scorebot extends PircBot
 {
-	private String name;
-	private String channel;
+	private String triviaName;
 	private MessageProcessor mp;
 	private NickProcessor np;
 	private TreeMap<String, Integer> scores;
 	
-	public Scorebot(String name, String channel)
+	public Scorebot(String triviaName)
 	{
 		super();
 		scores = new TreeMap<>();
 		mp = MessageProcessorFactory.getInstance("", this);
 		np = NickProcessorFactory.getInstance("", this);
-		this.name = name;
-		this.channel = channel;
+		this.triviaName = triviaName;
 	}
 
 	public static void main(String args[]) throws Exception
 	{
 		Options options = new Options();
 
-		Option name = new Option("n", "name", true, "nickname");
+		Option name = new Option("n", "name", true, "nickname of this bot");
 		name.setRequired(true);
 		options.addOption(name);
+
+		Option trivianame = new Option("tn", "trivianame", true, "nickname of the trivia bot");
+		trivianame.setRequired(true);
+		options.addOption(trivianame);
+
 
 		Option channel = new Option("ch", "channel", true, "channel to connect");
 		channel.setRequired(true);
@@ -53,20 +56,20 @@ public class Scorebot extends PircBot
 			System.out.println(e.getMessage());
 			formatter.printHelp("utility-name", options);
 
-			System.exit(1);
+			System.exit(-1);
 			throw e;
 		}
 
-		Scorebot bot = new Scorebot(cmd.getOptionValue("name"), cmd.getOptionValue("channel"));
+		Scorebot bot = new Scorebot(cmd.getOptionValue("trivianame"));
 		bot.setVerbose(true);
 		bot.setAutoNickChange(true);
+		bot.setName(cmd.getOptionValue("name"));
 		bot.connect("irc.quakenet.org");
-		bot.setName(bot.name);
-		bot.joinChannel(bot.channel);
+		bot.joinChannel(cmd.getOptionValue("channel"));
 	}
 
-	public String getChannel() {
-		return channel;
+	public String getTriviaName() {
+		return triviaName;
 	}
 
 	@Override
