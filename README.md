@@ -1,5 +1,9 @@
 This is a java bot to take account of players' scores of IRC triviabot.
 
+## Build
+
+``` ./gradlew build ```
+
 ## Usage
 
 Execute with a jdk 1.8:
