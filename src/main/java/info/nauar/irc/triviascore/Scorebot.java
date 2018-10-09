@@ -46,6 +46,10 @@ public class Scorebot extends PircBot
 		channel.setRequired(true);
 		options.addOption(channel);
 
+		Option server = new Option("s", "server", true, "IRC server to connect");
+		server.setRequired(true);
+		options.addOption(server);
+
 		CommandLineParser parser = new DefaultParser();
 		HelpFormatter formatter = new HelpFormatter();
 		CommandLine cmd;
@@ -54,8 +58,7 @@ public class Scorebot extends PircBot
 			cmd = parser.parse(options, args);
 		} catch (ParseException e) {
 			System.out.println(e.getMessage());
-			formatter.printHelp("utility-name", options);
-
+			formatter.printHelp("java -jar triviascore.jar", options);
 			System.exit(-1);
 			throw e;
 		}
@@ -64,7 +67,7 @@ public class Scorebot extends PircBot
 		bot.setVerbose(true);
 		bot.setAutoNickChange(true);
 		bot.setName(cmd.getOptionValue("name"));
-		bot.connect("irc.quakenet.org");
+		bot.connect(cmd.getOptionValue("server"));
 		bot.joinChannel(cmd.getOptionValue("channel"));
 	}
 
