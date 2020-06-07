@@ -19,11 +19,13 @@ public class Scorebot extends PircBot
 	private MessageProcessor mp;
 	private NickProcessor np;
 	private TreeMap<String, Integer> scores;
+	private TreeMap<String, Integer> games;
 	
 	public Scorebot(String triviaName)
 	{
 		super();
 		scores = new TreeMap<>();
+		games = new TreeMap<>();
 		mp = MessageProcessorFactory.getInstance("", this);
 		np = NickProcessorFactory.getInstance("", this);
 		this.triviaName = triviaName;
@@ -102,7 +104,12 @@ public class Scorebot extends PircBot
 	{
 		scores.clear();
 	}
-	
+
+	public void initGames()
+	{
+		games.clear();
+	}
+
 	public String showFinalResponses()
 	{
 		StringBuffer sb = new StringBuffer();
@@ -148,7 +155,54 @@ public class Scorebot extends PircBot
 		
 		return sb.toString();
 	}
-	
+
+	public String showGamesSoFar()
+	{
+		StringBuffer sb = new StringBuffer();
+
+		List<String> maxScoreUsers = new LinkedList<String>();
+		Integer maxScore = 0;
+
+
+		for (String user : games.descendingKeySet())
+		{
+
+			if (sb.length() != 0)
+				sb.append(", ");
+			else
+				sb.append(Colors.BOLD + "Results: " + Colors.NORMAL);
+			sb.append(user);
+			sb.append(": ");
+
+			Integer score = games.get(user);
+			sb.append(score);
+			if (maxScore < score)
+			{
+				maxScoreUsers.clear();
+				maxScoreUsers.add(user);
+				maxScore = score;
+			}
+			else if (maxScore == score)
+			{
+				maxScoreUsers.add(user);
+			}
+		}
+
+		sb.append(" " + Colors.BOLD + ((maxScoreUsers.size() > 1)?"Leader: ":"Leaders: ") + Colors.NORMAL);
+
+		boolean first = true;
+		for (String user : maxScoreUsers)
+		{
+			if (!first)
+				sb.append(", ");
+			sb.append(user);
+			first = false;
+		}
+
+		sb.append(" with " + maxScore + "games." );
+		return sb.toString();
+	}
+
 	public String getListOfUsers()
 	{
 		StringBuffer sb = new StringBuffer();

@@ -37,6 +37,7 @@ public class DefaultMessageProcessor implements MessageProcessor
 		if ((message.startsWith("Round completed!"))||(message.startsWith("Game terminated, say !trivia to restart.")))
 		{
 			bot.sendMessage(channel, bot.showFinalResponses());
+			bot.sendMessage(channel, bot.showGamesSoFar());
 			bot.initResponses();
 		}
 	}	
@@ -54,7 +55,13 @@ public class DefaultMessageProcessor implements MessageProcessor
 			bot.sendMessage(channel, "Shutting down... Good bye!");
 			System.exit(0);
 		}
-		
+
+		if (message.startsWith("!init"))
+		{
+			bot.initGames();
+			bot.initResponses();
+			bot.sendMessage(channel, "Initialization done. Ready to start a set of games.");
+		}
 		
 		if (message.startsWith("!get"))
 			processGetCommand(channel, sender, login,  hostname, message);
