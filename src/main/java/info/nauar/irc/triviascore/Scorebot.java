@@ -99,7 +99,17 @@ public class Scorebot extends PircBot
 		else
 			scores.put(user, 1);
 	}
-	
+
+	public void winner(String user)
+	{
+		if (games.containsKey(user))
+		{
+			games.put(user, games.get(user)+1);
+		}
+		else
+			games.put(user, 1);
+	}
+
 	public void initResponses()
 	{
 		scores.clear();
@@ -110,11 +120,12 @@ public class Scorebot extends PircBot
 		games.clear();
 	}
 
-	public String showFinalResponses()
+	public List<String> showFinalResponses()
 	{
+		List<String> result = new LinkedList<>();
 		StringBuffer sb = new StringBuffer();
 		
-		List<String> maxScoreUsers = new LinkedList<String>();
+		List<String> maxScoreUsers = new LinkedList<>();
 		Integer maxScore = 0;
 		
 		
@@ -152,25 +163,28 @@ public class Scorebot extends PircBot
 			sb.append(user);
 			first = false;
 		}
-		
-		return sb.toString();
-	}
 
-	public String showGamesSoFar()
-	{
-		StringBuffer sb = new StringBuffer();
+		if (maxScoreUsers.size() == 1)
+		{
+			winner(maxScoreUsers.get(0));
+		}
 
-		List<String> maxScoreUsers = new LinkedList<String>();
-		Integer maxScore = 0;
+		result.add(sb.toString());
+		sb = new StringBuffer();
+		maxScoreUsers.clear();
+		maxScore = 0;
 
+		first = true;
 
 		for (String user : games.descendingKeySet())
 		{
 
-			if (sb.length() != 0)
+			if (!first)
 				sb.append(", ");
-			else
-				sb.append(Colors.BOLD + "Results: " + Colors.NORMAL);
+			else {
+				sb.append(Colors.BOLD + "Overall results: " + Colors.NORMAL);
+				first = false;
+			}
 			sb.append(user);
 			sb.append(": ");
 
@@ -190,7 +204,7 @@ public class Scorebot extends PircBot
 
 		sb.append(" " + Colors.BOLD + ((maxScoreUsers.size() > 1)?"Leader: ":"Leaders: ") + Colors.NORMAL);
 
-		boolean first = true;
+		first = true;
 		for (String user : maxScoreUsers)
 		{
 			if (!first)
@@ -199,8 +213,9 @@ public class Scorebot extends PircBot
 			first = false;
 		}
 
-		sb.append(" with " + maxScore + "games." );
-		return sb.toString();
+		sb.append(" with " + maxScore + " games." );
+		result.add(sb.toString());
+		return result;
 	}
 
 	public String getListOfUsers()

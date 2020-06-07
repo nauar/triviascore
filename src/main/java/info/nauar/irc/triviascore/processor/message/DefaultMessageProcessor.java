@@ -36,8 +36,8 @@ public class DefaultMessageProcessor implements MessageProcessor
 		
 		if ((message.startsWith("Round completed!"))||(message.startsWith("Game terminated, say !trivia to restart.")))
 		{
-			bot.sendMessage(channel, bot.showFinalResponses());
-			bot.sendMessage(channel, bot.showGamesSoFar());
+			for (String msg : bot.showFinalResponses())
+				bot.sendMessage(channel, msg);
 			bot.initResponses();
 		}
 	}	
