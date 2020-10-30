@@ -90,6 +90,13 @@ public class Scorebot extends PircBot
 		np.processNickChange(oldNick, login, hostname, newNick);
 	}
 
+	@Override
+	protected void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
+		super.onKick(channel, kickerNick, kickerLogin, kickerHostname, recipientNick, reason);
+	}
+
+
+
 	public void correctResponse(String user)
 	{
 		if (scores.containsKey(user))
